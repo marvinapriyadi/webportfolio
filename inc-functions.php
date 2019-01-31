@@ -6,7 +6,7 @@ function login($username, $password, $mysqli) {
     $username = preg_replace('|[^a-z0-9-~+_.?#=!&;,/:%@$\|*\'()\\x80-\\xff]|i', '', $username);
     $password = preg_replace('|[^a-z0-9-~+_.?#=!&;,/:%@$\|*\'()\\x80-\\xff]|i', '', $password);
 
-    $query = "SELECT * FROM `users` WHERE USERNAME='$username' and PASSWORD='$password'";
+    $query = "SELECT * FROM `users` WHERE USERNAME='$username' and PASSWORD='$password' LIMIT 1";
     
     $result = mysqli_query($mysqli, $query) or die(mysqli_error($mysqli));
     $count = mysqli_num_rows($result);

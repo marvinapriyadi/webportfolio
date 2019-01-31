@@ -1,5 +1,24 @@
-<?php 
-	$userHashed = $_GET['user'];
+<?php
+	include_once 'inc-connectDB.php';
+	include_once 'inc-functions.php';
+
+	$username = $_GET['user'];
+
+	$query = "SELECT * FROM `users` WHERE USERNAME='$username' LIMIT 1";
+	$result = mysqli_query($mysqli, $query) or die(mysqli_error($mysqli));
+
+	$count = mysqli_num_rows($result);
+	if ($count < 1){
+        header('Location: 404.php');
+	}
+
+	while($row = mysqli_fetch_array($result)) {
+		$username = $row['USERNAME'];
+        $profile_pic_path = $row['PROFILE_PIC_PATH'];
+        $fullname = $row['FULLNAME'];
+        $currentClass = $row['CURRENT_CLASS'];
+        $userrole = $row['ROLE'];
+    }
  ?>
 
 <!DOCTYPE html>
@@ -7,195 +26,206 @@
 <head>
 <?php require_once("inc-header.php"); ?>
 <style type="text/css">
-	a{
-		text-decoration: none !important;
-	}
-	#profile_image {
-	  border-radius: 5px;
-	  cursor: pointer;
-	  transition: 0.3s;
-	}
+	/***
+	User Profile Sidebar by @keenthemes
+	A component of Metronic Theme - #1 Selling Bootstrap 3 Admin Theme in Themeforest: http://j.mp/metronictheme
+	Licensed under MIT
+	***/
 
-	#profile_image:hover {opacity: 0.7;}
-
-	/* The Modal (background) */
-	.modal {
-	  display: none; /* Hidden by default */
-	  position: fixed; /* Stay in place */
-	  z-index: 1; /* Sit on top */
-	  padding-top: 100px; /* Location of the box */
-	  left: 0;
-	  top: 0;
-	  width: 100%; /* Full width */
-	  height: 100%; /* Full height */
-	  overflow: auto; /* Enable scroll if needed */
-	  background-color: rgb(0,0,0); /* Fallback color */
-	  background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+	body {
+	  background: #F1F3FA;
 	}
 
-	/* Modal Content (Image) */
-	.modal-content {
-	  margin: auto;
-	  display: block;
-	  width: 80%;
-	  max-width: 700px;
+	/* Profile container */
+	.profile {
+	  margin: 20px 0;
 	}
 
-	/* Caption of Modal Image (Image Text) - Same Width as the Image */
-	#caption {
-	  margin: auto;
-	  display: block;
-	  width: 80%;
-	  max-width: 700px;
+	/* Profile sidebar */
+	.profile-sidebar {
+	  padding: 20px 0 10px 0;
+	  background: #fff;
+	}
+
+	.profile-userpic img {
+	  float: none;
+	  margin: 0 auto;
+	  max-height: 150px;
+	  max-width: 150px;
+	  -webkit-border-radius: 50% !important;
+	  -moz-border-radius: 50% !important;
+	  border-radius: 50% !important;
+	}
+
+	.profile-usertitle {
 	  text-align: center;
-	  color: #ccc;
-	  padding: 10px 0;
-	  height: 150px;
+	  margin-top: 20px;
 	}
 
-	/* Add Animation - Zoom in the Modal */
-	.modal-content, #caption { 
-	  animation-name: zoom;
-	  animation-duration: 0.6s;
+	.profile-usertitle-name {
+	  color: #5a7391;
+	  font-size: 16px;
+	  font-weight: 600;
+	  margin-bottom: 7px;
 	}
 
-	@keyframes zoom {
-	  from {transform:scale(0)} 
-	  to {transform:scale(1)}
+	.profile-usertitle-job {
+	  text-transform: uppercase;
+	  color: #5b9bd1;
+	  font-size: 12px;
+	  font-weight: 600;
+	  margin-bottom: 15px;
 	}
 
-	/* The Close Button */
-	.close {
-	  position: absolute;
-	  top: 15px;
-	  right: 35px;
-	  color: #f1f1f1;
-	  font-size: 40px;
-	  font-weight: bold;
-	  transition: 0.3s;
+	.profile-userbuttons {
+	  text-align: center;
+	  margin-top: 10px;
 	}
 
-	.close:hover,
-	.close:focus {
-	  color: #bbb;
-	  text-decoration: none;
-	  cursor: pointer;
+	.profile-usersosmed {
+	  text-align: center;
+	  margin-top: 10px;
+	  margin-left: auto;
+	  margin-right: auto;
 	}
 
-	/* 100% Image Width on Smaller Screens */
-	@media only screen and (max-width: 700px){
-	  .modal-content {
-	    width: 100%;
-	  }
+	.profile-userbuttons .btn {
+	  text-transform: uppercase;
+	  font-size: 11px;
+	  font-weight: 600;
+	  padding: 6px 15px;
+	  margin-right: 5px;
+	}
+
+	.profile-userbuttons .btn:last-child {
+	  margin-right: 0px;
+	}
+	    
+	.profile-usermenu {
+	  margin-top: 30px;
+	}
+
+	.profile-usermenu ul li {
+	  border-bottom: 1px solid #f0f4f7;
+	}
+
+	.profile-usermenu ul li:last-child {
+	  border-bottom: none;
+	}
+
+	.profile-usermenu ul li a {
+	  color: #93a3b5;
+	  font-size: 14px;
+	  font-weight: 400;
+	}
+
+	.profile-usermenu ul li a i {
+	  margin-right: 8px;
+	  font-size: 14px;
+	}
+
+	.profile-usermenu ul li a:hover {
+	  background-color: #fafcfd;
+	  color: #5b9bd1;
+	}
+
+	.profile-usermenu ul li.active {
+	  border-bottom: none;
+	}
+
+	.profile-usermenu ul li.active a {
+	  color: #5b9bd1;
+	  background-color: #f6f9fb;
+	  border-left: 2px solid #5b9bd1;
+	  margin-left: -2px;
+	}
+
+	/* Profile Content */
+	.profile-content {
+	  padding: 20px;
+	  background: #fff;
+	  min-height: 460px;
 	}
 </style>
-	<title>Student Portfolio</title>
 </head>
 <body>
 	<!-- NAVIGATION BAR -->
 	<?php require_once("inc-navigationbar.php"); ?>
-  
-	<!-- The Modal -->
-	<div id="myModal" class="modal">
 
-	  <!-- The Close Button -->
-	  <span class="close">&times;</span>
+	<div class="container">
+	    <div class="row profile">
+			<div class="col-md-3">
+				<div class="profile-sidebar">
+					<!-- SIDEBAR USERPIC -->
+					<div class="profile-userpic">
+						<?php 
+						echo "<img src='". $profile_pic_path ."' class='img-responsive' alt='profile_picture'>";
+						?>
+					</div>
+					<!-- END SIDEBAR USERPIC -->
+					<!-- SIDEBAR USER TITLE -->
+					<div class="profile-usertitle">
+						<?php  
+						echo "<div class='profile-usertitle-name'>
+							". $username ."
+						</div>
+						<div class='profile-usertitle-job'>
+							". $fullname ." - " . $currentClass . "<br>
+							". $userrole ."
+						</div>"
+						?>
+					</div>
+					<!-- END SIDEBAR USER TITLE -->
+					<!-- SIDEBAR BUTTONS -->
+					<!-- <div class="profile-userbuttons">
+						<button type="button" class="btn btn-success btn-sm">Follow</button>
+						<button type="button" class="btn btn-danger btn-sm">Message</button>
+					</div> -->
+					<!-- END SIDEBAR BUTTONS -->
 
-	  <!-- Modal Content (The Image) -->
-	  <img class="modal-content" id="img01">
-
-	  <!-- Modal Caption (Image Text) -->
-	  <div id="caption"></div>
-	</div>
-  	<div class="container">
-  		<!-- PROFILE -->
-	  	<div class="row">
-	  		<br>
-		    <div class="col-md-6 img text-right">
-		      <img style="width:600; height:600; max-height: 80%; max-width:80%;" src="http://papers.co/wallpaper/papers.co-hr24-redvelvet-girl-kpop-smile-irene-25-wallpaper.jpg"  alt="Profile image" class="img-rounded" id="profile_image">
-		    </div>
-		    <div class="col-md-6 details offset-mt-5">
-		      <blockquote>
-		        <h5>Bae Joo-hyun (Irene)</h5>
-		        <small><cite>Daegu, South Korean</cite></small>
-		      </blockquote>
-		      <p>
-		      	<?php echo $userHashed; ?><br>
-		        March 29, 1991<br>
-		        Leader of Red Velvet <br>
-		        http://redvelvet.smtown.com/
-		      </p>
-		    </div>
-
-		  </div>
-		<div class="row text-center" style="margin-top:7px">
-			<?php require_once("inc-sosmed.php") ?>
-			<a href="https://www.facebook.com/redvelvet.baeirene/" class="fa fa-facebook"></a>
-			<a href="#" class="fa fa-twitter"></a>
-			<a href="#" class="fa fa-google"></a>
-			<a href="#" class="fa fa-linkedin"></a>
-			<a href="#" class="fa fa-youtube"></a>
-			<a href="#" class="fa fa-instagram"></a>
-			<a href="#" class="fa fa-snapchat-ghost"></a>
-		</div>
-		<hr>
-		<!-- ITEMS -->
-		<div class="row">
-			<a data-toggle="collapse" href="#myprojects"><h1 class="text-center">My Projects</h1></a>
-			<div id="myprojects" class="collapse in">
-			  	<div class="table-responsive">  
-					<table class="table table-hover">
-					    <thead>
-					      <tr>
-					        <th>No.</th>
-					        <th>Title</th>
-					        <th>Links</th>
-					      </tr>
-					    </thead>
-					    <tbody>
-					      <tr>
-					        <td>1</td>
-					        <td>Doe</td>
-					        <td>john@example.com</td>
-					      </tr>
-					      <tr>
-					        <td>2</td>
-					        <td>Moe</td>
-					        <td>mary@example.com</td>
-					      </tr>
-					      <tr>
-					        <td>3</td>
-					        <td>Dooley</td>
-					        <td>july@example.com</td>
-					      </tr>
-					    </tbody>
-					</table>
+					<!-- <div class="profile-usersosmed">
+						<?php //require_once("inc-sosmed.php") ?>
+						<a href="https://www.facebook.com/redvelvet.baeirene/" class="fa fa-facebook"></a>
+						<a href="#" class="fa fa-twitter"></a>
+						<a href="#" class="fa fa-google"></a>
+						<a href="#" class="fa fa-youtube"></a>
+						<a href="#" class="fa fa-instagram"></a>
+						<a href="#" class="fa fa-snapchat-ghost"></a>
+					</div> -->
+					<!-- SIDEBAR MENU -->
+					<div class="profile-usermenu">
+						<ul class="nav">
+							<li class="active">
+								<a href="#">
+								<i class="glyphicon glyphicon-home"></i>
+								Overview </a>
+							</li>
+							<li>
+								<a href="#">
+								<i class="glyphicon glyphicon-user"></i>
+								Account Settings </a>
+							</li>
+							<li>
+								<a href="#" target="_blank">
+								<i class="glyphicon glyphicon-ok"></i>
+								Tasks </a>
+							</li>
+							<li>
+								<a href="#">
+								<i class="glyphicon glyphicon-flag"></i>
+								Help </a>
+							</li>
+						</ul>
+					</div>
+					<!-- END MENU -->
 				</div>
+			</div>
+			<div class="col-md-9">
+	            <div class="profile-content">
+				  	PROJECTS
+	            </div>
 			</div>
 		</div>
 	</div>
 </body>
 </html>
-
-<script type="text/javascript">
-	// Get the modal
-	var modal = document.getElementById('myModal');
-
-	// Get the image and insert it inside the modal - use its "alt" text as a caption
-	var img = document.getElementById('profile_image');
-	var modalImg = document.getElementById("img01");
-	var captionText;
-	img.onclick = function(){
-	  modal.style.display = "block";
-	  modalImg.src = this.src;
-	  captionText.innerHTML = "This is the original size.";
-	}
-
-	// Get the <span> element that closes the modal
-	var span = document.getElementsByClassName("close")[0];
-
-	// When the user clicks on <span> (x), close the modal
-	span.onclick = function() { 
-	  modal.style.display = "none";
-	}
-</script>

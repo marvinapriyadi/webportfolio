@@ -48,7 +48,7 @@ require_once("inc-header.php");
 			  		<div id="1" class="tab-pane fade in active">
 			  			<br>
 				  	    <div class="col-sm-6">
-					      <h4 class="text-capitalize"><a href="page-student_profile.php?user=t3sth4sh">nama lengkap</a></h4>
+					      <h4 class="text-capitalize"><a href="page-student_profile.php?user=bambang123">nama lengkap</a></h4>
 					      <a href="#">
 					      	<img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image">
 					      </a>
