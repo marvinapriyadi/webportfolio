@@ -66,12 +66,12 @@
 				 <input name="username" type="text" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
 				 <label for="inputPassword" class="sr-only">Password</label>
 				 <input name="pass" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-				 <div class="checkbox mb-3 text-left">
+				<!--  <div class="checkbox mb-3 text-left">
 				   <label>
 				     <input type="checkbox" value="remember-me"> Remember me
 				   </label>
 				  </div>
-				  Are you a teacher? <a href="page-login_teacher.php">Sign in here!</a>
+				  Are you a teacher? <a href="page-login_teacher.php">Sign in here!</a> -->
 				 <button class="btn btn-lg btn-primary btn-block" type="submit" style="margin-top: 10px;">Sign in</button>
 			</form>	
 		</div>
